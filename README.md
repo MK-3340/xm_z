@@ -28,3 +28,21 @@
 
 ```bash
 python simulators/virtual_device.py
+
+## Day 2：虚拟设备数据生成模块优化与单元测试
+
+今天完成了虚拟设备模拟器的结构优化。
+
+### 完成内容
+
+- 将设备数据生成逻辑封装为 `generate_device_data()`
+- 修复字段名错误：`tempeerature` 改为 `temperature`
+- 新增 pytest 单元测试，验证字段完整性和数据范围
+- 新增 `.gitignore`，避免提交虚拟环境和缓存文件
+
+### 运行方式
+
+运行虚拟设备：
+
+```bash
+python simulators/virtual_device.py
