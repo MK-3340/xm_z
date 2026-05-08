@@ -28,6 +28,9 @@
 
 ```bash
 python simulators/virtual_device.py
+```
+
+---
 
 ## Day 2：虚拟设备数据生成模块优化与单元测试
 
@@ -46,3 +49,10 @@ python simulators/virtual_device.py
 
 ```bash
 python simulators/virtual_device.py
+```
+
+运行测试：
+
+```bash
+python -m pytest
+```
