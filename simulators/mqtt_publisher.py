@@ -5,9 +5,9 @@ import paho.mqtt.client as mqtt
 
 from simulators.virtual_device import generate_device_data
 
-BROKER_HOST = "broker.emqx.io"
+BROKER_HOST = "localhost"
 BROKER_PORT = 1883
-TOPIC = "xm_z/MK3340/motor_001/telemetry"
+TOPIC = "factory/motor_001/telemetry"
 
 def main():
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
