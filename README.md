@@ -56,3 +56,23 @@ python simulators/virtual_device.py
 ```bash
 python -m pytest
 ```
+---
+
+## Day 3：MQTT 发布与订阅最小闭环
+
+今天完成了虚拟设备数据通过 MQTT 发布，并由网关订阅端接收。
+
+### 完成内容
+
+- 新增 `simulators/mqtt_publisher.py`
+- 新增 `gateway/mqtt_subscriber.py`
+- 使用 topic：`factory/motor_001/telemetry`
+- 虚拟设备每秒生成一条 JSON 数据，并发布到 MQTT Broker
+- 网关订阅端接收并打印 JSON 消息
+
+### 运行方式
+
+启动 MQTT Broker：
+
+```bash
+mosquitto -v
