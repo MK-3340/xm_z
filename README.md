@@ -78,6 +78,8 @@ python -m pytest
 mosquitto -v
 ---
 
+---
+
 ## Day 4：本地 Mosquitto 与 MQTT 闭环验收
 
 今天完成了本地 MQTT Broker 环境验证，并跑通了虚拟设备到网关订阅端的数据链路。
@@ -99,3 +101,32 @@ mqtt_publisher.py
 localhost:1883 Mosquitto
         ↓
 mqtt_subscriber.py
+```
+
+### 运行命令
+
+启动 Mosquitto：
+
+```powershell
+& "C:\Program Files\mosquitto\mosquitto.exe" -v
+```
+
+启动订阅端：
+
+```powershell
+python -m gateway.mqtt_subscriber
+```
+
+启动发布端：
+
+```powershell
+python -m simulators.mqtt_publisher
+```
+
+### 验收标准
+
+订阅端能持续收到 `motor_001` 的 JSON 数据。
+
+### 下一步
+
+在订阅端加入 JSON 解析、字段校验和异常兜底。
