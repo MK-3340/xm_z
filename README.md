@@ -76,3 +76,26 @@ python -m pytest
 
 ```bash
 mosquitto -v
+---
+
+## Day 4：本地 Mosquitto 与 MQTT 闭环验收
+
+今天完成了本地 MQTT Broker 环境验证，并跑通了虚拟设备到网关订阅端的数据链路。
+
+### 完成内容
+
+- 启动本地 Mosquitto Broker
+- 运行 `gateway/mqtt_subscriber.py` 订阅 topic
+- 运行 `simulators/mqtt_publisher.py` 发布虚拟设备数据
+- 验证 publisher → broker → subscriber 链路可用
+
+### 当前链路
+
+```text
+virtual_device.py
+        ↓
+mqtt_publisher.py
+        ↓
+localhost:1883 Mosquitto
+        ↓
+mqtt_subscriber.py

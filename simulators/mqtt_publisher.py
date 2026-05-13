@@ -1,7 +1,7 @@
 import json
 import time
 
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt  # type: ignore
 
 from simulators.virtual_device import generate_device_data
 
