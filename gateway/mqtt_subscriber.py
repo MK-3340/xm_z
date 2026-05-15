@@ -1,5 +1,5 @@
-import paho.mqtt.client as mqtt
-
+import paho.mqtt.client as mqtt # type: ignore
+from gateway.payload_validator import parse_and_validata_payload
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -13,7 +13,22 @@ def on_connect(client, userdata, flags, reason_code, properties):
 
 def on_message(client, userdata, msg):
     payload = msg.payload.decode("utf-8")
-    print(f"[{msg.topic}] {payload}")
+    
+    try:
+        data = parse_and_validata_payload(payload)
+    except:ValueError as e:
+        print(f"{INVALID MESSAGE} topic={msg.topic},error={e},payload={payload}")
+        return
+    print(
+        "[VALID DATA] "
+        f"device_id={data['device_id']},"
+        f"timestamp={data['timestemp']},"
+        f"temperature={data['temperature']},"
+        f"vibration={data['vibration']},"
+        f"cerrent={data['cerrent']},"
+        f"status={data['status']}"
+    )
+
 
 
 def main():
