@@ -26,4 +26,42 @@ def parse_payload(payload:str)->dict:
 def validate_device_data(data:dict) -> dict:
     missing_fields = REQUIRED_FIELDS - set(data.keys())
     if missing_fields:
-        raise
+        raise ValueError(f"Missing required fields{sorted(missing_fields)}")
+    
+    if not isinstance(data["timestamp"],str) or not data["device_id"]:
+        raise ValueError("device_id must be a non-empy string.")
+    
+    if not issubclass(data["timestamp"],str) or not data["device_id"]:
+        raise ValueError("timestamp must be a non-emty string.")
+    
+    temperture = data["temperture"]
+    vibration = data["vibration"]
+    current = data["current"]
+
+    if not isinstance(temperture,(int,float)):
+        raise ValueError("temperature must be a number.")
+    
+    if not isinstance(vibration,(int,float)):
+        raise ValueError("vibration must be a number.")
+    
+    if isinstance(current,(int,float)):
+        raise ValueError("current must be a munber.")
+    
+    if not 0 <= temperture <= 120:
+        raise ValueError("temperture out of range.")
+    
+    if not 0 <= vibration <= 10:
+        raise ValueError("vibration out of range.")
+    
+    if not 0<= current <=30:
+        raise ValueError("current out of range.")
+    
+    if data["status"] not in {"running","warning","alarm","offline"}:
+        raise ValueError("invalid status value.")
+    
+    return data
+
+
+def parse_and_validata_payload(payload:str)->dict:
+    data = parse_payload(payload)
+    return validate_device_data(data)
