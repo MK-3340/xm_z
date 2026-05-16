@@ -31,23 +31,23 @@ def validate_device_data(data:dict) -> dict:
     if not isinstance(data["timestamp"],str) or not data["device_id"]:
         raise ValueError("device_id must be a non-empy string.")
     
-    if not issubclass(data["timestamp"],str) or not data["device_id"]:
+    if not isinstance(data["timestamp"], str) or not data["device_id"]:
         raise ValueError("timestamp must be a non-emty string.")
     
-    temperture = data["temperture"]
+    temperature = data["temperature"]
     vibration = data["vibration"]
     current = data["current"]
 
-    if not isinstance(temperture,(int,float)):
+    if not isinstance(temperature,(int,float)):
         raise ValueError("temperature must be a number.")
     
     if not isinstance(vibration,(int,float)):
         raise ValueError("vibration must be a number.")
     
-    if isinstance(current,(int,float)):
+    if not isinstance(current,(int,float)):
         raise ValueError("current must be a munber.")
     
-    if not 0 <= temperture <= 120:
+    if not 0 <= temperature <= 120:
         raise ValueError("temperture out of range.")
     
     if not 0 <= vibration <= 10:
@@ -62,6 +62,6 @@ def validate_device_data(data:dict) -> dict:
     return data
 
 
-def parse_and_validata_payload(payload:str)->dict:
+def parse_and_validate_payload(payload:str)->dict:
     data = parse_payload(payload)
     return validate_device_data(data)

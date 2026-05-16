@@ -130,3 +130,33 @@ python -m simulators.mqtt_publisher
 ### 下一步
 
 在订阅端加入 JSON 解析、字段校验和异常兜底。
+---
+
+## Day 5：MQTT 消息解析与字段校验
+
+今天完成了网关订阅端的消息解析和基础字段校验。
+
+### 完成内容
+
+- 新增 `gateway/payload_validator.py`
+- 实现 JSON 字符串解析
+- 校验设备数据必要字段
+- 校验 temperature、vibration、current 的基本范围
+- 修改 `gateway/mqtt_subscriber.py`
+- 网关收到非法消息时不会崩溃，而是输出错误信息
+- 新增 `tests/test_payload_validator.py`
+
+### 当前链路
+
+```text
+virtual_device.py
+        ↓
+mqtt_publisher.py
+        ↓
+localhost:1883 Mosquitto
+        ↓
+mqtt_subscriber.py
+        ↓
+payload_validator.py
+        ↓
+合法数据打印 / 非法数据拒绝
