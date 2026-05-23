@@ -22,10 +22,10 @@ def on_message(client, userdata, msg):
     print(
         "[VALID DATA] "
         f"device_id={data['device_id']},"
-        f"timestamp={data["timestamp"]},"
+        f"timestamp={data['timestamp']},"
         f"temperature={data['temperature']},"
         f"vibration={data['vibration']},"
-        f"cerrent={data["current"]},"
+        f"cerrent={data['current']},"
         f"status={data['status']}"
     )
 

@@ -65,3 +65,30 @@ def test_parse_and_validate_payload_success():
     assert data["device_id"] == "motor_001"
     assert data["temperature"] == 55.5
 
+def test_validata_device_data_empty_device_id():
+    data = valid_data()
+    data["device_id"]=""
+
+    with pytest.raises(ValueError):
+        validate_device_data(data)
+
+    
+def test_validata_device_data_invalid_status():
+    data = valid_data()
+    data["status"] = "broken"
+
+    with pytest.raises(ValueError):
+        validate_device_data(data)
+
+
+def validata_device_data_current_out_of_range():
+    data = valid_data()
+    data["current"] = 99
+
+    with pytest.raises(ValueError):
+        validate_device_data(data)
+
+
+
+
+

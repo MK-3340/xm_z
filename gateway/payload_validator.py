@@ -26,9 +26,9 @@ def parse_payload(payload:str)->dict:
 def validate_device_data(data:dict) -> dict:
     missing_fields = REQUIRED_FIELDS - set(data.keys())
     if missing_fields:
-        raise ValueError(f"Missing required fields{sorted(missing_fields)}")
+        raise ValueError(f"Missing required fields：{sorted(missing_fields)}")
     
-    if not isinstance(data["timestamp"],str) or not data["device_id"]:
+    if not isinstance(data["device_id"],str) or not data["device_id"]:
         raise ValueError("device_id must be a non-empy string.")
     
     if not isinstance(data["timestamp"], str) or not data["device_id"]:

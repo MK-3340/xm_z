@@ -160,3 +160,33 @@ mqtt_subscriber.py
 payload_validator.py
         ↓
 合法数据打印 / 非法数据拒绝
+
+---
+
+## Day 6：修复 MQTT 订阅端与 payload 校验测试
+
+今天对 Day 5 的网关消息解析与字段校验进行了修复和验收。
+
+### 完成内容
+
+- 修复 `gateway/mqtt_subscriber.py` 中 f-string 字段输出问题
+- 修复 `gateway/payload_validator.py` 中 device_id、timestamp 校验逻辑
+- 优化错误提示信息
+- 补充 payload 校验测试用例
+- 重新运行 `python -m pytest`
+- 验证 MQTT publisher → broker → subscriber → payload_validator 链路可用
+
+### 当前阶段
+
+项目当前处于阶段3：
+
+```text
+MQTT 订阅
+    ↓
+JSON 解析
+    ↓
+字段完整性校验
+    ↓
+数值范围校验
+    ↓
+合法数据打印 / 非法数据拒绝
