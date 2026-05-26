@@ -3,6 +3,11 @@ from pathlib import Path
 
 
 def init_db(db_path:str = "data/iot_data.db") -> None:
+    """
+    初始化 SQLite 数据库。
+    如果 data 目录不存在，就自动创建。
+    如果 sensor_data 表不存在，就自动建表。
+    """
     db_file = Path(db_path)
     db_file.parent.mkdir(parents=True,exist_ok=True)
 
@@ -23,5 +28,80 @@ def init_db(db_path:str = "data/iot_data.db") -> None:
         """
     )
 
-def insert_sensor_data(db_path,data):
-def get_latest_sensor_data(db_path):
+    conn.commit()
+    conn.close()
+
+
+def insert_sensor_data(data:dict,db_path: str = "data/iot_data.db")->None:
+    '''
+    插入一条已经通过的 payload_validator 校验的数据.
+    '''
+    init_db(db_path)
+
+
+    conn = sqlite3.connect(db_path)
+    cursor =  conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO sensor_data (
+        device_id,
+        timestamp,
+        temperature,
+        vibration,
+        current,
+        status
+        )VALUES(?,?,?,?,?,?)
+        """,
+        (
+            data["device_id"],
+            data["timestamp"],
+            data["temperature"],
+            data["vibration"],
+            data["current"],
+            data["status"],
+        ),
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
+    """
+    查询最新一条设备数据。
+    没有数据时返回 None。
+    """  
+    init_db(db_path)
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            id,
+            device_id,
+            timestamp,
+            vibration,
+            current,
+            status
+        FROM sensor_data
+        ORDER BY id DESC
+        LIMIT 1
+        """
+    )
+    row = cursor.fetchmany()
+    conn.close()
+
+    if row is None:
+        return None
+    
+    return {
+        "id": row[0],
+        "device_id": row[1],
+        "timestamp": row[2],
+        "temperature": row[3],
+        "vibration": row[4],
+        "current": row[5],
+        "status": row[6],
+    }
