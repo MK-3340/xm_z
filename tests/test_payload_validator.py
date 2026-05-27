@@ -81,7 +81,7 @@ def test_validata_device_data_invalid_status():
         validate_device_data(data)
 
 
-def validata_device_data_current_out_of_range():
+def test_validata_device_data_current_out_of_range():
     data = valid_data()
     data["current"] = 99
 

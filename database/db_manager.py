@@ -12,9 +12,9 @@ def init_db(db_path:str = "data/iot_data.db") -> None:
     db_file.parent.mkdir(parents=True,exist_ok=True)
 
     conn = sqlite3.connect(db_path)
-    cursor = conn.cursor
+    cursor = conn.cursor()
 
-    cursor.excute(
+    cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS sensor_data(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,6 +82,7 @@ def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
             id,
             device_id,
             timestamp,
+            temperature,
             vibration,
             current,
             status
@@ -90,7 +91,7 @@ def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
         LIMIT 1
         """
     )
-    row = cursor.fetchmany()
+    row = cursor.fetchone()
     conn.close()
 
     if row is None:

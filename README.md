@@ -190,3 +190,33 @@ JSON 解析
 数值范围校验
     ↓
 合法数据打印 / 非法数据拒绝
+---
+
+## Day 7：SQLite 数据库存储模块
+
+今天完成了设备数据的 SQLite 最小落库功能。
+
+### 完成内容
+
+- 新增 `database/db_manager.py`
+- 新增 `database/__init__.py`
+- 新增 `tests/test_db_manager.py`
+- 实现 SQLite 数据库初始化
+- 实现设备数据插入
+- 实现最新一条设备数据查询
+- 使用 pytest 验证数据库建表、插入和查询功能
+
+### 当前链路
+
+```text
+virtual_device.py
+        ↓
+mqtt_publisher.py
+        ↓
+localhost:1883 Mosquitto
+        ↓
+mqtt_subscriber.py
+        ↓
+payload_validator.py
+        ↓
+SQLite sensor_data 表
