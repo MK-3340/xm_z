@@ -27,7 +27,7 @@ def on_message(client, userdata, msg):
         f"timestamp={data['timestamp']},"
         f"temperature={data['temperature']},"
         f"vibration={data['vibration']},"
-        f"cerrent={data['current']},"
+        f"current={data['current']},"
         f"status={data['status']}"
     )
 
