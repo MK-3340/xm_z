@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt # type: ignore
 from gateway.payload_validator import parse_and_validate_payload
+from database.db_manager import insert_sensor_data
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -16,6 +17,7 @@ def on_message(client, userdata, msg):
     
     try:
         data = parse_and_validate_payload(payload)
+        insert_sensor_data(data)
     except ValueError as e:
         print(f"[INVALID MESSAGE] topic={msg.topic},error={e},payload={payload}")
         return

@@ -220,3 +220,33 @@ mqtt_subscriber.py
 payload_validator.py
         ↓
 SQLite sensor_data 表
+---
+
+## Day 8：MQTT 合法数据自动写入 SQLite
+
+今天完成了网关订阅端与 SQLite 数据库模块的连接。
+
+### 完成内容
+
+- 修改 `gateway/mqtt_subscriber.py`
+- 网关收到 MQTT 消息后先进行 JSON 解析和字段校验
+- 合法数据自动调用 `insert_sensor_data()` 写入 SQLite
+- 非法数据不会入库，并输出错误信息
+- 使用 `get_latest_sensor_data()` 验证最新数据可以查询
+
+### 当前链路
+
+```text
+virtual_device.py
+        ↓
+mqtt_publisher.py
+        ↓
+localhost:1883 Mosquitto
+        ↓
+mqtt_subscriber.py
+        ↓
+payload_validator.py
+        ↓
+db_manager.py
+        ↓
+data/iot_data.db
