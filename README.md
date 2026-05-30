@@ -250,3 +250,35 @@ payload_validator.py
 db_manager.py
         ↓
 data/iot_data.db
+
+---
+
+## Day 9：SQLite 最新数据查询脚本
+
+今天完成了数据库最新数据查询脚本，用于验证 MQTT 合法数据是否已经成功写入 SQLite。
+
+### 完成内容
+
+- 新增 `database/query_latest.py`
+- 修复 `gateway/mqtt_subscriber.py` 中 `current` 输出字段拼写
+- 使用 `get_latest_sensor_data()` 查询最新一条设备数据
+- 验证 MQTT 入库后的数据可以通过命令行查询
+
+### 当前链路
+
+```text
+virtual_device.py
+        ↓
+mqtt_publisher.py
+        ↓
+localhost:1883 Mosquitto
+        ↓
+mqtt_subscriber.py
+        ↓
+payload_validator.py
+        ↓
+db_manager.py
+        ↓
+data/iot_data.db
+        ↓
+query_latest.py
