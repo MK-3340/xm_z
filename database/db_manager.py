@@ -88,7 +88,7 @@ def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
             status
         FROM sensor_data
         ORDER BY id DESC
-        LIMIT 1
+        LIMIT ?
         """
     )
     row = cursor.fetchone()
@@ -106,3 +106,56 @@ def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
         "current": row[5],
         "status": row[6],
     }
+
+
+def query_latest_sensor_data(
+        limit: int = 10,
+        db_path: str = "data/iot_data.db"
+) -> list[dict]:
+    """
+    查询最近 N 条传感器数据。
+    默认查询最近 10 条。
+    """
+    if limit <=0:
+        raise ValueError("limit must be greather than 0")
+    
+    init_db(db_path)
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT 
+            id,
+            device_id,
+            timestamp,
+            temperature,
+            vibration,
+            current,
+            status
+        FROM sensor_data
+        ORDER BY timestamp DESC,id DESC
+        LIMIT ?
+        """,
+        (limit,),
+    )
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    result = []
+    for row in rows:
+        result.append(
+            {
+                "id":row[0],
+                "decice_id":row[1],
+                "timestamp":row[2],
+                "temperature":row[3],
+                "vibration":row[4],
+                "current":row[5],
+                "status":row[6],
+            }
+        )
+
+        return result

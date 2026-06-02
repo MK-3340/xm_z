@@ -1,16 +1,16 @@
 import json
 
-from database.db_manager import get_latest_sensor_data
+from database.db_manager import query_latest_sensor_data
 
 
 def main():
-    latest = get_latest_sensor_data()
+    latest_data = query_latest_sensor_data(limit=10)
 
-    if latest is None:
+    if not latest_data:
         print("No sensor data found.")
         return 
     
-    print(json.dumps(latest,ensure_ascii=False,indent=2))
+    print(json.dumps(latest_data,ensure_ascii=False,indent=2))
 
 
 if __name__ == "__main__":
