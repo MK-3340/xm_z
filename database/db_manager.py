@@ -88,7 +88,7 @@ def get_latest_sensor_data(db_path: str = "data/iot_data.db") -> dict|None:
             status
         FROM sensor_data
         ORDER BY id DESC
-        LIMIT ?
+        LIMIT 1
         """
     )
     row = cursor.fetchone()
@@ -149,7 +149,7 @@ def query_latest_sensor_data(
         result.append(
             {
                 "id":row[0],
-                "decice_id":row[1],
+                "device_id":row[1],
                 "timestamp":row[2],
                 "temperature":row[3],
                 "vibration":row[4],
@@ -158,4 +158,4 @@ def query_latest_sensor_data(
             }
         )
 
-        return result
+    return result

@@ -79,7 +79,7 @@ mosquitto -v
 ---
 
 ---
-
+```
 ## Day 4：本地 Mosquitto 与 MQTT 闭环验收
 
 今天完成了本地 MQTT Broker 环境验证，并跑通了虚拟设备到网关订阅端的数据链路。
@@ -163,6 +163,8 @@ payload_validator.py
 
 ---
 
+
+```
 ## Day 6：修复 MQTT 订阅端与 payload 校验测试
 
 今天对 Day 5 的网关消息解析与字段校验进行了修复和验收。
@@ -191,7 +193,7 @@ JSON 解析
     ↓
 合法数据打印 / 非法数据拒绝
 ---
-
+```
 ## Day 7：SQLite 数据库存储模块
 
 今天完成了设备数据的 SQLite 最小落库功能。
@@ -221,7 +223,7 @@ payload_validator.py
         ↓
 SQLite sensor_data 表
 ---
-
+```
 ## Day 8：MQTT 合法数据自动写入 SQLite
 
 今天完成了网关订阅端与 SQLite 数据库模块的连接。
@@ -252,7 +254,7 @@ db_manager.py
 data/iot_data.db
 
 ---
-
+```
 ## Day 9：SQLite 最新数据查询脚本
 
 今天完成了数据库最新数据查询脚本，用于验证 MQTT 合法数据是否已经成功写入 SQLite。
@@ -282,3 +284,5 @@ db_manager.py
 data/iot_data.db
         ↓
 query_latest.py
+```
+### Day 10：修复 SQLite 历史查询测试，完成最近 10 条传感器数据查询。
