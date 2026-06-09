@@ -284,5 +284,22 @@ db_manager.py
 data/iot_data.db
         ↓
 query_latest.py
-```
+
 ### Day 10：修复 SQLite 历史查询测试，完成最近 10 条传感器数据查询。
+```
+### Day 11：阈值异常检测函数
+
+今天新增了最小阈值异常检测模块。
+
+### 完成内容
+
+- 新增 `anomaly_detection/threshold_detector.py`
+- 实现 `detect_threshold_anomaly(data)`
+- 支持温度、振动、电流三类阈值异常判断
+- 新增 `tests/test_threshold_detector.py`
+- 使用 pytest 验证正常数据不报警，异常数据触发报警
+
+### 验收命令
+
+```bash
+python -m pytest tests/test_threshold_detector.py -q
