@@ -26,7 +26,11 @@ def init_db(db_path:str = "data/iot_data.db") -> None:
         status TEXT NOT NULL 
         )
         """
+        
     )
+
+
+
 
     conn.commit()
     conn.close()
@@ -159,3 +163,36 @@ def query_latest_sensor_data(
         )
 
     return result
+
+
+def insert_alarm(alarm: dict,db_path: str = "data/iot_data.db") -> None:
+    """
+    插入一条报警的记录
+    alarm 来自 threshld_detector.detect_threshold_anomaly(data)的结果 
+    """
+    init_db(db_path)
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO alarms (
+        device_id,
+        timestamp,
+        alarm_type,
+        alarm_reason,
+        severity
+        ) VALUES(?, ?, ?, ?, ?)
+        """,
+        (
+            alarm["device_id"],
+            alarm["timestamp"],
+            alarm["alarm_reason"],
+            alarm["alarm_reason"],
+            alarm["severity"],
+        ),
+    )
+
+    conn.commit()
+    conn.close()
