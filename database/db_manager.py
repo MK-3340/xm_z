@@ -26,10 +26,20 @@ def init_db(db_path:str = "data/iot_data.db") -> None:
         status TEXT NOT NULL 
         )
         """
-        
     )
 
-
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS alarms(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            device_id TEXT NOT NULL,
+            timestamp TEXT NOT NULL,
+            alarm_type TEXT NOT NULL,
+            alarm_reason TEXT NOT NULL,
+            severity TEXT NOT NULL
+        )
+        """
+    )
 
 
     conn.commit()
@@ -188,7 +198,7 @@ def insert_alarm(alarm: dict,db_path: str = "data/iot_data.db") -> None:
         (
             alarm["device_id"],
             alarm["timestamp"],
-            alarm["alarm_reason"],
+            alarm["alarm_type"],
             alarm["alarm_reason"],
             alarm["severity"],
         ),

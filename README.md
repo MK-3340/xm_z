@@ -312,3 +312,8 @@ python -m pytest -q
 - 修复 timestamp 空字符串校验问题
 - 修复 README Day 11 测试命令代码块未闭合问题
 - 重新运行 payload 校验测试和阈值检测测试
+### Day 11 修复记录
+
+- 修复 timestamp 空字符串校验问题
+- 修复 README Day 11 测试命令代码块未闭合问题
+- 重新运行 payload 校验测试和阈值检测测试

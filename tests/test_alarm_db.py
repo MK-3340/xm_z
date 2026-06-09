@@ -35,6 +35,6 @@ def test_insert_alarm(tmp_path):
 
     assert row is not None
     assert row[0] == "motor_001"
-    assert row[2] == "threshld"
+    assert row[2] == "threshold"
     assert "temperature" in row[3]
     assert row[4] == "high"
