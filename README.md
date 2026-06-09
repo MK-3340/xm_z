@@ -301,5 +301,14 @@ query_latest.py
 
 ### 验收命令
 
-```bash
-python -m pytest tests/test_threshold_detector.py -q
+
+运行：
+
+```powershell
+python -m pytest tests/test_payload_validator.py tests/test_threshold_detector.py -q
+python -m pytest -q
+### Day 11 修复记录
+
+- 修复 timestamp 空字符串校验问题
+- 修复 README Day 11 测试命令代码块未闭合问题
+- 重新运行 payload 校验测试和阈值检测测试

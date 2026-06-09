@@ -31,7 +31,7 @@ def validate_device_data(data:dict) -> dict:
     if not isinstance(data["device_id"],str) or not data["device_id"]:
         raise ValueError("device_id must be a non-empy string.")
     
-    if not isinstance(data["timestamp"], str) or not data["device_id"]:
+    if not isinstance(data["timestamp"], str) or not data["timestamp"]:
         raise ValueError("timestamp must be a non-emty string.")
     
     temperature = data["temperature"]

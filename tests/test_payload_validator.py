@@ -88,7 +88,11 @@ def test_validata_device_data_current_out_of_range():
     with pytest.raises(ValueError):
         validate_device_data(data)
 
-
-
+def test_vaildator_device_data_empty_timestamp():
+    data = valid_data()
+    data["timestamp"] = ""
+    
+    with pytest.raises(ValueError):
+        validate_device_data(data)
 
 
