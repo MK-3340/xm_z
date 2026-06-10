@@ -317,3 +317,30 @@ python -m pytest -q
 - 修复 timestamp 空字符串校验问题
 - 修复 README Day 11 测试命令代码块未闭合问题
 - 重新运行 payload 校验测试和阈值检测测试
+```
+## Day 12：阈值报警写入 SQLite
+
+今天完成了阈值异常检测与报警表的最小闭环。
+
+### 完成内容
+
+- 修改 `gateway/mqtt_subscriber.py`
+- MQTT 合法数据入库后，调用 `detect_threshold_anomaly(data)`
+- 当检测到温度、振动或电流异常时，构造报警记录
+- 调用 `insert_alarm(alarm)` 写入 SQLite 的 `alarms` 表
+- 新增 `tests/test_alarm_db.py`，验证报警可以写入数据库
+
+### 当前链路
+
+```text
+mqtt_publisher.py
+        ↓
+mqtt_subscriber.py
+        ↓
+payload_validator.py
+        ↓
+sensor_data 表
+        ↓
+threshold_detector.py
+        ↓
+alarms 表

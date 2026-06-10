@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt # type: ignore
 from gateway.payload_validator import parse_and_validate_payload
-from database.db_manager import insert_sensor_data
+from database.db_manager import insert_sensor_data,insert_alarm
+from anomaly_detection.threshold_detector import detect_threshold_anomaly
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -17,7 +18,23 @@ def on_message(client, userdata, msg):
     
     try:
         data = parse_and_validate_payload(payload)
+
         insert_sensor_data(data)
+
+        result = detect_threshold_anomaly(data)
+        if result["is_anomaly"]:
+            alarm = {
+                "device_id":data["device_id"],
+                "timestamp":data["timestamp"],
+                "alarm_type":result["alarm_type"],
+                "alarm_reason":result["alarm_reason"],
+                "severity":result["severity"],
+            }
+            insert_alarm(alarm)
+            print(f"[ALARM SAVED]{alarm}")
+
+
+
     except ValueError as e:
         print(f"[INVALID MESSAGE] topic={msg.topic},error={e},payload={payload}")
         return
