@@ -344,3 +344,19 @@ sensor_data 表
 threshold_detector.py
         ↓
 alarms 表
+## Day 13：异常数据发布脚本
+
+今天新增了 `simulators/abnormal_publisher.py`，用于发送温度、振动、电流三类异常数据。
+
+### 完成内容
+
+- 新增异常数据发布脚本
+- 构造 temperature、vibration、current 三类异常 payload
+- 通过 MQTT 发布到 `factory/motor_001/telemetry`
+- 网关接收后完成校验、阈值检测、报警入库
+- 使用 SQLite 查询验证 `alarms` 表新增报警记录
+
+### 验证命令
+
+```powershell
+python -m simulators.abnormal_publisher
