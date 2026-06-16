@@ -1,6 +1,12 @@
 import math
 
 
+def calculate_mean(values: list[float]) -> float:
+    if not values:
+        raise ValueError("values must not be empty")
+    return sum(values) / len(values)
+
+
 def calculate_zscore(value: float,history_values: list[float]) -> float:
     """
     计算value相对于历史数据的z-score

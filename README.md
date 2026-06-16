@@ -360,3 +360,18 @@ alarms 表
 
 ```powershell
 python -m simulators.abnormal_publisher
+## Day 14：Z-score 测试修复
+
+今天没有修改 `anomaly_detection/zscore_detector.py`，只修改了 `tests/test_zscore_detector.py`。
+
+修复内容：
+
+- 测试导入改为当前代码中实际存在的 `calculate_zscore`
+- 测试导入改为当前代码中实际存在的 `detect_zsore_anomaly`
+- 删除对不存在函数 `calculate_mean`、`calculate_std` 的导入
+- 按当前函数参数 `history_value: list[float]` 编写测试
+
+验证命令：
+
+```powershell
+python -m pytest tests/test_zscore_detector.py -q
