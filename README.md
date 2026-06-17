@@ -375,3 +375,21 @@ python -m simulators.abnormal_publisher
 
 ```powershell
 python -m pytest tests/test_zscore_detector.py -q
+
+## Day 15：阈值 + Z-score 统一异常分析服务
+
+今天新增了 `anomaly_detection/anomaly_service.py`。
+
+### 完成内容
+
+- 新增 `analyze_sensor_data(data, history)`
+- 先执行阈值异常检测
+- 阈值未触发时，再执行 Z-score 异常检测
+- 统一返回 `is_anomaly / alarm_type / alarm_reason / severity`
+- 新增 `tests/test_anomaly_service.py`
+
+### 验证命令
+
+```powershell
+python -m pytest tests/test_anomaly_service.py -q
+python -m pytest -q
