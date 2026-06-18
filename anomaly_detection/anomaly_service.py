@@ -1,5 +1,5 @@
 from anomaly_detection.threshold_detector import detect_threshold_anomaly
-from anomaly_detection.zscore_detector import detect_zsore_anomaly
+from anomaly_detection.zscore_detector import detect_zscore_anomaly
 
 
 def analyze_sensor_data(data: dict, history: dict[str, list[float]] | None = None) -> dict:
@@ -22,7 +22,7 @@ def analyze_sensor_data(data: dict, history: dict[str, list[float]] | None = Non
     for field in ["temperature", "vibration", "current"]:
         history_values = history.get(field, [])
 
-        zscore_result = detect_zsore_anomaly(
+        zscore_result = detect_zscore_anomaly(
             data=data,
             history_value=history_values,
             field=field,
@@ -31,7 +31,7 @@ def analyze_sensor_data(data: dict, history: dict[str, list[float]] | None = Non
         if zscore_result["is_anomaly"]:
             return zscore_result
         
-        return {
+    return {
             "is_anomaly": False,
             "alarm_type": None,
             "alarm_reason": None,
