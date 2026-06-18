@@ -48,7 +48,7 @@ def validate_device_data(data:dict) -> dict:
         raise ValueError("current must be a munber.")
     
     if not 0 <= temperature <= 120:
-        raise ValueError("temperture out of range.")
+        raise ValueError("temperature out of range.")
     
     if not 0 <= vibration <= 10:
         raise ValueError("vibration out of range.")

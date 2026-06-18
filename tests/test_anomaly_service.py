@@ -71,3 +71,19 @@ def test_analyze_without_history_should_not_crash():
 
     assert result["is_anomaly"] is False
     assert result["severity"] == "normal"
+
+
+def test_zscore_anomaly_should_be_detected():
+    data = make_data()
+    data["vibration"] = 8.0
+
+    history = {
+        "temperature": [54, 55, 56, 55],
+        "vibration": [1.0, 1.1, 1.2, 1.1, 1.0],
+        "current": [3.0, 3.2, 3.1, 3.3],
+    }
+
+    result = analyze_sensor_data(data, history)
+
+    assert result["is_anomaly"] is True
+    assert result["alarm_type"] in {"threshold","zscore"}    
