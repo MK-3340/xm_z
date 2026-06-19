@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
                 row["timestamp"],
                 row["alarm_type"],
                 row["alarm_reason"],
-                row["seveity"],
+                row["severity"],
             ] 
 
             for col_index, value in enumerate(values):

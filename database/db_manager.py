@@ -252,7 +252,7 @@ def query_latest_alarms(
                 "timestamp":row[2],
                 "alarm_type":row[3],
                 "alarm_reason":row[4],
-                "seveity":row[5],
+                "severity":row[5],
             }
         )
     
