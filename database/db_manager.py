@@ -206,3 +206,54 @@ def insert_alarm(alarm: dict,db_path: str = "data/iot_data.db") -> None:
 
     conn.commit()
     conn.close()
+
+def query_latest_alarms(
+        limit: int = 10,
+        db_path: str = "data/iot_data.db"
+) -> list[dict]:
+    """
+    查询最近 N 条报警记录。
+    默认查询最近 10 条
+    """
+    if limit <= 0:
+        raise ValueError("limit must be greater than 0")
+    
+    init_db(db_path)
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT 
+            id,
+            device_id,
+            timestamp,
+            alarm_type,
+            alarm_reason,
+            severity
+            FROM alarms
+            ORDER BY timestamp DESC, id DESC
+            LIMIT ?
+        """,
+        (limit,),
+    )
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    result = []
+
+    for row in rows:
+        result.append(
+            {
+                "id":row[0],
+                "device_id":row[1],
+                "timestamp":row[2],
+                "alarm_type":row[3],
+                "alarm_reason":row[4],
+                "seveity":row[5],
+            }
+        )
+    
+    return result

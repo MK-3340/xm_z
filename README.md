@@ -375,8 +375,8 @@ python -m simulators.abnormal_publisher
 
 ```powershell
 python -m pytest tests/test_zscore_detector.py -q
-
-## Day 15：阈值 + Z-score 统一异常分析服务
+```
+## 2026-6-19：阈值 + Z-score 统一异常分析服务
 
 今天新增了 `anomaly_detection/anomaly_service.py`。
 
@@ -393,3 +393,36 @@ python -m pytest tests/test_zscore_detector.py -q
 ```powershell
 python -m pytest tests/test_anomaly_service.py -q
 python -m pytest -q
+## Day 17：PySide6 最新数据展示窗口
+
+今天完成了 PySide6 最小监控窗口。
+
+### 完成内容
+
+- 新增 `dashboard/main_window.py`
+- 使用 `QMainWindow` 创建监控窗口
+- 使用 `QTableWidget` 展示 SQLite 中最近 10 条传感器数据
+- 数据来源为 `query_latest_sensor_data(limit=10)`，不是手写假数据
+
+### 启动命令
+
+```powershell
+python -m dashboard.main_window
+```
+# 2026-6-19: 补丁1
+
+ PySide6 界面报警记录展示。
+
+### 完成内容
+
+- 修改 `database/db_manager.py`
+- 新增 `query_latest_alarms(limit=10)`
+- 修改 `dashboard/main_window.py`
+- 界面上半部分显示最近传感器数据
+- 界面下半部分显示最近报警记录
+- 报警数据来自 SQLite 的 `alarms` 表
+
+### 启动命令
+
+```powershell
+python -m dashboard.main_window
