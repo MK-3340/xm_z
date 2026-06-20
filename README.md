@@ -426,3 +426,18 @@ python -m dashboard.main_window
 
 ```powershell
 python -m dashboard.main_window
+
+## 2026-06-20：PySide6 监控面板定时刷新
+
+### 完成内容
+
+- 修改 `dashboard/main_window.py`
+- 使用 `QTimer` 每 2000ms 自动刷新界面
+- 传感器数据表从 SQLite 的 `sensor_data` 表读取
+- 报警记录表从 SQLite 的 `alarms` 表读取
+- 发布新数据后，不需要重启界面即可看到更新
+
+### 启动命令
+
+```powershell
+python -m dashboard.main_window
