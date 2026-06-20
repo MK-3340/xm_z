@@ -1,6 +1,6 @@
 import sys 
 
-
+from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -52,6 +52,10 @@ class MainWindow(QMainWindow):
         self.load_latest_data()
         self.load_latest_alarms()
 
+        self.refresh_time = QTimer(self)
+        self.refresh_time.timeout.connect(self.refresh_dashboard)
+        self.refresh_time.start(2000)
+
     def load_latest_data(self):
         rows = query_latest_sensor_data(limit=10)
 
@@ -92,8 +96,10 @@ class MainWindow(QMainWindow):
                 self.alarm_table.setItem(row_index, col_index, item)
 
 
-
-
+    def refresh_dashboard(self):
+        """每 2 秒从SQLite 刷新两张表。"""
+        self.load_latest_data()
+        self.load_latest_alarms()
 
 
 def main():
