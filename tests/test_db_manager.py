@@ -1,3 +1,4 @@
+import sqlite3
 from database.db_manager import (
     init_db,
     insert_sensor_data,
@@ -16,20 +17,21 @@ def valid_data():
     }
 
 
-def test_init_db_creates_database_file(tmp_path):
+def test_init_db_creates_tables(tmp_path):
     db_path = tmp_path / "test_iot_data.db"
 
     init_db(str(db_path))
 
-    assert db_path.exists()
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'"
+    )
+    table_names = {row[0] for row in cursor.fetchall()}
+    conn.close()
 
-
-def test_insert_and_get_latest_sensor_data(tmp_path):
-    db_path = tmp_path / "test_iot_data.db"
-
-    init_db(str(db_path))
-
-    assert db_path.exists()
+    assert "sensor_data" in table_names
+    assert "alarms" in table_names
 
 
 def test_insert_and_get_latest_sensor_data(tmp_path):

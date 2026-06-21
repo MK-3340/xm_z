@@ -1,6 +1,6 @@
 from anomaly_detection.zscore_detector import (
     calculate_zscore,
-    detect_zsore_anomaly,
+    detect_zscore_anomaly,
 )
 
 
@@ -43,7 +43,7 @@ def test_detect_zsore_normal_temperature_should_not_alarm():
     data = make_data()
     history_values = [39.0, 40.0, 41.0, 40.5, 39.5]
 
-    result = detect_zsore_anomaly(
+    result = detect_zscore_anomaly(
         data=data,
         history_value=history_values,
         field="temperature",
@@ -60,7 +60,7 @@ def test_detect_zsore_high_temperature_should_alarm():
     data["temperature"] = 100.0
     history_values = [39.0, 40.0, 41.0, 40.5, 39.5]
 
-    result = detect_zsore_anomaly(
+    result = detect_zscore_anomaly(
         data=data,
         history_value=history_values,
         field="temperature",
@@ -72,12 +72,12 @@ def test_detect_zsore_high_temperature_should_alarm():
     assert result["severity"] == "medium"
 
 
-def test_detect_zsore_high_vibration_should_alarm():
+def test_detect_zscore_high_vibration_should_alarm():
     data = make_data()
     data["vibration"] = 8.0
     history_values = [0.8, 1.0, 1.1, 0.9, 1.2]
 
-    result = detect_zsore_anomaly(
+    result = detect_zscore_anomaly(
         data=data,
         history_value=history_values,
         field="vibration",
@@ -93,7 +93,7 @@ def test_detect_zsore_high_current_should_alarm():
     data["current"] = 25.0
     history_values = [2.8, 3.0, 3.1, 2.9, 3.2]
 
-    result = detect_zsore_anomaly(
+    result = detect_zscore_anomaly(
         data=data,
         history_value=history_values,
         field="current",
@@ -104,12 +104,12 @@ def test_detect_zsore_high_current_should_alarm():
     assert "current" in result["alarm_reason"]
 
 
-def test_detect_zsore_std_zero_should_not_crash():
+def test_detect_zscore_std_zero_should_not_crash():
     data = make_data()
     data["temperature"] = 100.0
     history_values = [40.0, 40.0, 40.0]
 
-    result = detect_zsore_anomaly(
+    result = detect_zscore_anomaly(
         data=data,
         history_value=history_values,
         field="temperature",

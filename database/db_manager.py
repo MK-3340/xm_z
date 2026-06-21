@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+from datetime import datetime
 
 
 def init_db(db_path:str = "data/iot_data.db") -> None:
@@ -257,3 +258,55 @@ def query_latest_alarms(
         )
     
     return result
+
+
+def query_device_status(
+        device_id: str,
+        db_path: str = "data/iot_data.db",
+        online_seconds: int = 5,
+        now: datetime |None = None,
+) -> dict | None:
+    """根据最后一次上报的时间判断设备在线状态。"""
+    if online_seconds <= 0:
+        raise ValueError("online_seconds must be greater than 0")
+
+    init_db(db_path)
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(
+            """
+            SELECT device_id,timestamp,status
+            FROM sensor_data
+            WHERE device_id = ?
+            ORDER BY timestamp DESC, id DESC
+            LIMIT 1
+            """,
+            (device_id,),
+        )
+    row = cursor.fetchone()
+    conn.close()
+
+    if row is None:
+        return None
+    
+    last_seen_text = row[1]
+    device_status = row[2]
+
+    try:
+        last_seen = datetime.fromisoformat(last_seen_text)
+        current_time = now or datetime.now()
+        age_seconds = max(0, (current_time - last_seen).total_seconds())
+        online_status = "online" if age_seconds <= online_seconds else "offline"
+    except ValueError:
+        age_seconds = None
+        online_status = "unknown"
+
+    return {
+    "device_id": row[0],
+    "last_seen": row[1],
+    "device_status": row[2],
+    "online_status": online_status,
+    "age_seconds": age_seconds,
+    }
