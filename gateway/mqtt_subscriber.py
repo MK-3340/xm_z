@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt # type: ignore
 from gateway.payload_validator import parse_and_validate_payload
 from database.db_manager import insert_sensor_data,insert_alarm
 from anomaly_detection.threshold_detector import detect_threshold_anomaly
+from gateway.security import is_allowed_device
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -18,6 +19,10 @@ def on_message(client, userdata, msg):
     
     try:
         data = parse_and_validate_payload(payload)
+        if not is_allowed_device(data["device_id"]):
+            raise ValueError(f"device_id is not allowed:{data['device_id']}")
+        
+        insert_sensor_data(data)
 
         insert_sensor_data(data)
 
