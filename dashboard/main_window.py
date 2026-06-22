@@ -21,7 +21,7 @@ from database.db_manager import (
 class MainWindow(QMainWindow):
     def __init__(self):
 
-        self.devicestatus_label = QLabel("设备状态：等待数据...")
+        self.device_status_label = QLabel("设备状态：等待数据...")
 
         super().__init__()
         
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         )       
 
         layout = QVBoxLayout()
-        layout.addWidget(self.devicestatus_label)
+        layout.addWidget(self.device_status_label)
         layout.addWidget(self.title_label)
         layout.addWidget(self.sensor_table)
         layout.addWidget(self.alarm_title_label)
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         info = query_device_status(device_id="motor_001")
 
         if info is None:
-            self.device_status_label.setText("设备状态：暂无数据")
+            self.self.device_status_label.setText("设备状态：暂无数据")
             return 
         
         text_map = {
@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
 
         online_text = text_map[info["online_status"]]
 
-        self.devicestatus_label.setText(
+        self.device_status_label.setText(
             f"设备状态：{online_text} | " 
             f"设备ID：{info['device_id']} | "
             f"最后上报：{info['last_seen']} | "
