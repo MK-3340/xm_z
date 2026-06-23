@@ -21,11 +21,9 @@ from database.db_manager import (
 class MainWindow(QMainWindow):
     def __init__(self):
 
-        self.device_status_label = QLabel("设备状态：等待数据...")
-
         super().__init__()
-        
-        
+
+        self.device_status_label = QLabel("设备状态：等待数据...")
 
         self.setWindowTitle("工业物联网网关监控面板")
         self.resize(900, 500)
@@ -117,7 +115,7 @@ class MainWindow(QMainWindow):
         info = query_device_status(device_id="motor_001")
 
         if info is None:
-            self.self.device_status_label.setText("设备状态：暂无数据")
+            self.device_status_label.setText("设备状态：暂无数据")
             return 
         
         text_map = {

@@ -24,8 +24,6 @@ def on_message(client, userdata, msg):
         
         insert_sensor_data(data)
 
-        insert_sensor_data(data)
-
         result = detect_threshold_anomaly(data)
         if result["is_anomaly"]:
             alarm = {

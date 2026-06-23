@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 
-DEFAULT_CONFIG_PATH = Path("configs/device.json")
+DEFAULT_CONFIG_PATH = Path("configs/devices.json")
 
 
 def load_allowed_devices(
