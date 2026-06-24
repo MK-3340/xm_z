@@ -2,6 +2,7 @@ import json
 import time 
 from datetime import datetime
 
+from gateway.security import add_signature
 import paho.mqtt.client as mqtt # type: ignore
 
 
@@ -42,7 +43,7 @@ def main() -> None:
     cases = ["temperature","vibration","current"]
 
     for case_name in cases:
-        data = make_abnormal_payload(case_name)
+        data = add_signature(make_abnormal_payload(case_name))
         payload = json.dumps(data, ensure_ascii=False)
 
         info = client.publish(TOPIC,payload)

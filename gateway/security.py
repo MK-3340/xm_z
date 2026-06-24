@@ -1,8 +1,13 @@
 import json 
+import hmac
+import hashlib
+import os
 from pathlib import Path
 
 
-DEFAULT_CONFIG_PATH = Path("configs/devices.json")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CONFIG_PATH = PROJECT_ROOT  / "configs" / "devices.json"
+HMAC_SECRET_ENV = "IOT_HMAC_SECRET"
 
 
 def load_allowed_devices(
@@ -34,6 +39,71 @@ def is_allowed_device(
         device_id: str,
         config_path: str | Path = DEFAULT_CONFIG_PATH,
 ) -> bool:
-    allowed_devices = load_allowed_devices(config_path)
-    return device_id in allowed_devices
+    return device_id in load_allowed_devices(config_path)
     
+
+def get_hmac_secret() -> str:
+    secret = os.getenv(HMAC_SECRET_ENV)
+
+    if not secret:
+        raise ValueError(
+            f"{HMAC_SECRET_ENV} is not set."
+            "Set the same secret in the publisher and gateway terminals."  
+            )
+    
+    return secret
+
+
+def canonical_payload(data: dict) -> str:
+    payload_without_signature = {
+        key: value 
+        for key,value in data.items() 
+        if key != "signature"
+    }
+
+
+    return json.dumps(
+        payload_without_signature,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",",":")
+    )
+
+
+def make_signature(
+        data: dict,
+        secret:str | None = None,
+) -> str:
+    secret_text = secret if secret is not None else get_hmac_secret()
+
+    return hmac.new(
+        secret_text.encode("utf-8"),
+        canonical_payload(data).encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
+
+
+def add_signature(
+        data: dict,
+        secret: str | None = None,
+) -> dict:
+    signed_data = dict(data)
+    signed_data["signature"] = make_signature(signed_data,secret)
+    return signed_data
+
+
+def verify_signature(
+        data:dict,
+        secret:str | None = None,
+) -> bool:
+    received_signature = data.get("signature")
+
+    if not isinstance(received_signature,str) or not received_signature:
+        return False
+    
+    expected_signature = make_signature(data,secret)
+
+    return hmac.compare_digest(
+        received_signature,
+        expected_signature,
+    )

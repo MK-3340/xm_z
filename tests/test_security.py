@@ -60,3 +60,12 @@ def test_invalid_device_list_raises_error(tmp_path):
             "motor_001",
             config_path,
         )
+
+
+def test_default_whitelist_path_does_not_depend_on_working_directory(monkeypatch,tmp_path,):
+    monkeypatch.chdir(tmp_path)
+
+    assert is_allowed_device("motor_001") is True
+    assert is_allowed_device("hacker_001") is False
+
+    
