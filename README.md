@@ -441,3 +441,6 @@ python -m dashboard.main_window
 
 ```powershell
 python -m dashboard.main_window
+```
+# 2026-06-25
+安全模块已完成：设备白名单、HMAC 签名认证、timestamp 时间窗口、nonce 防重放。
