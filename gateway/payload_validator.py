@@ -4,10 +4,11 @@ import json
 REQUIRED_FIELDS = {
     "device_id",
     "timestamp",
+    "nonce",
     "temperature",
     "vibration",
     "current",
-    "status"
+    "status",  
 }
 
 
@@ -41,6 +42,9 @@ def validate_device_data(data:dict) -> dict:
     if not isinstance(temperature,(int,float)):
         raise ValueError("temperature must be a number.")
     
+    if not isinstance(data["nonce"],str) or not data["nonce"]:
+        raise ValueError("nonce must be a non-empty string.")
+
     if not isinstance(vibration,(int,float)):
         raise ValueError("vibration must be a number.")
     

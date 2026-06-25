@@ -9,6 +9,7 @@ def build_data() -> dict:
         "device_id": "motor_001",
         "timestamp": "2026-06-23T20:00:00",
         "timperature":50.0,
+        "nonce":"hmac-test-nonce",
         "vibration": 1.0,
         "current":3.0,
         "status": "running",

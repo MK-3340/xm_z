@@ -8,6 +8,7 @@ def build_data() -> dict:
     return {
         "device_id": "motor_001",
         "timestamp": "2026-06-23T20:00:00",
+        "nonce": "subscriber-test-nonce",
         "temperature": 50.0,
         "vibration": 1.0,
         "current": 3.0,
@@ -60,6 +61,18 @@ def test_valid_message_is_persisted_once(monkeypatch):
         mqtt_subscriber,
         "insert_alarm",
         lambda alarm: inserted_alarms.append(alarm),
+    )
+
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "check_timestamp_window",
+        lambda timestamp:True,
+    )
+
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "check_nonce_once",
+        lambda device_id,nonce:True
     )
 
     message = SimpleNamespace(

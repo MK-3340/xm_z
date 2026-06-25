@@ -1,5 +1,6 @@
 import json
 import time
+import secrets
 
 import paho.mqtt.client as mqtt  # type: ignore
 
@@ -13,6 +14,7 @@ TOPIC = "factory/motor_001/telemetry"
 
 def build_signed_payload() -> dict:
     data = generate_device_data()
+    data["nonce"] = secrets.token_hex(16)
     return add_signature(data)
 
 

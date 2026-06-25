@@ -1,7 +1,8 @@
 import json
 import time 
-from datetime import datetime
+import secrets
 
+from datetime import datetime
 from gateway.security import add_signature
 import paho.mqtt.client as mqtt # type: ignore
 
@@ -15,6 +16,7 @@ def make_abnormal_payload(case_name: str) -> dict:
     data = {
         "device_id": "motor_001",
         "timestamp": datetime.now().isoformat(timespec="seconds"),
+        "nonce": secrets.token_hex(16),
         "temperature": 40.0,
         "vibration": 1.0,
         "current": 3.0,

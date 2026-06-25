@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt # type: ignore
 from gateway.payload_validator import parse_and_validate_payload
 from database.db_manager import insert_sensor_data,insert_alarm
 from anomaly_detection.threshold_detector import detect_threshold_anomaly
-from gateway.security import is_allowed_device, verify_signature
+from gateway.security import is_allowed_device, verify_signature,check_nonce_once,check_timestamp_window
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -25,6 +25,12 @@ def on_message(client, userdata, msg):
         if not verify_signature(data):
             raise ValueError("invalid HMAC signature")
         
+        if not check_timestamp_window(data["timestamp"]):
+            raise ValueError("timestamp is expired or invalid")
+        
+        if not check_nonce_once(data["device_id"],data["nonce"]):
+            raise ValueError("duplicate nonce detected")
+
         insert_sensor_data(data)
 
         result = detect_threshold_anomaly(data)

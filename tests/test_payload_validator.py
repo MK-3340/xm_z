@@ -12,6 +12,7 @@ def valid_data():
     return {
         "device_id":"motor_001",
         "timestamp":"2026-05-14T10:00:00",
+        "nonce":"test-nonce-001",
         "temperature":55.5,
         "vibration":1.2,
         "current":3.4,
