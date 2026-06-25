@@ -64,3 +64,33 @@ README 只加一段：
 
 
 ---
+## HMAC 本地运行说明
+
+网关会对 MQTT 数据执行设备白名单和 HMAC 签名校验。
+只有字段校验、白名单校验、HMAC 校验均通过的数据，才会写入 SQLite。
+
+本地演示时，需要在发布器和网关终端设置相同环境变量：
+
+```powershell
+$env:IOT_HMAC_SECRET = "本地测试密钥"
+
+运行顺序：
+
+1. 启动 Mosquitto Broker
+
+
+2. 启动 gateway.mqtt_subscriber
+
+
+3. 启动 simulators.mqtt_publisher
+
+
+4. 启动 simulators.abnormal_publisher 验证报警链路
+
+
+
+安全说明：HMAC 用于验证消息来源和完整性，不用于加密 MQTT 负载内容。
+
+再在 README 顶部加一句当前状态：
+
+```md
