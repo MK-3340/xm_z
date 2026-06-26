@@ -444,3 +444,22 @@ python -m dashboard.main_window
 ```
 # 2026-06-25
 安全模块已完成：设备白名单、HMAC 签名认证、timestamp 时间窗口、nonce 防重放。
+
+# 2026-06-26
+## 当前 MVP 状态
+
+已完成：
+- Python 模拟设备通过 MQTT 上报数据
+- 网关校验 payload、白名单、HMAC、timestamp 和 nonce
+- 合法数据写入 SQLite
+- 阈值异常写入 alarms 表
+- PySide6 展示最新数据和报警记录
+- pytest 自动化测试与 JUnit XML 测试报告
+
+当前限制：
+- nonce 仅保存在网关进程内存中，网关重启后会清空
+- Z-score 模块已存在，但暂未接入实时 MQTT 网关链路
+- ESP32 属于可选增强，不影响 MVP
+
+
+

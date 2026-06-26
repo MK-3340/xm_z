@@ -84,3 +84,40 @@ def test_valid_message_is_persisted_once(monkeypatch):
 
     assert inserted_sensor_data == [data]
     assert inserted_alarms == []
+
+
+def test_invalid_signature_is_not_persisted(monkeypatch,capsys):
+    data = build_data()
+    inserted_sensor_data = []
+
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "parse_and_validate_payload",
+        lambda payload:data,
+    )
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "is_allowed_device",
+        lambda device_id: True,
+    )
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "verify_signature",
+        lambda payload: False,
+    )
+    monkeypatch.setattr(
+        mqtt_subscriber,
+        "insert_sensor_data",
+        lambda payload:
+        inserted_sensor_data.append(payload),
+    )
+    message = SimpleNamespace(
+        topic = "factory/motor_001/telemetry",
+        payload = json.dumps(data).encode("utf-8"),
+    )
+
+    mqtt_subscriber.on_message(None, None, message)
+
+    output = capsys.readouterr().out
+    assert inserted_sensor_data == []
+    assert "invalid HMAC signature" in output
