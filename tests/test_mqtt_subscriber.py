@@ -1,7 +1,8 @@
 import json
-from types import SimpleNamespace
-
+import logging
 import gateway.mqtt_subscriber as mqtt_subscriber
+
+from types import SimpleNamespace
 
 
 def build_data() -> dict:
@@ -43,7 +44,7 @@ def test_valid_message_is_persisted_once(monkeypatch):
     monkeypatch.setattr(
         mqtt_subscriber,
         "insert_sensor_data",
-        lambda payload: inserted_sensor_data.append(payload),
+        lambda payload,db_path=None: inserted_sensor_data.append(payload),
     )
 
     monkeypatch.setattr(
@@ -60,7 +61,7 @@ def test_valid_message_is_persisted_once(monkeypatch):
     monkeypatch.setattr(
         mqtt_subscriber,
         "insert_alarm",
-        lambda alarm: inserted_alarms.append(alarm),
+        lambda alarm,db_path=None: inserted_alarms.append(alarm),
     )
 
     monkeypatch.setattr(
@@ -86,7 +87,7 @@ def test_valid_message_is_persisted_once(monkeypatch):
     assert inserted_alarms == []
 
 
-def test_invalid_signature_is_not_persisted(monkeypatch,capsys):
+def test_invalid_signature_is_not_persisted(monkeypatch,caplog):
     data = build_data()
     inserted_sensor_data = []
 
@@ -118,6 +119,5 @@ def test_invalid_signature_is_not_persisted(monkeypatch,capsys):
 
     mqtt_subscriber.on_message(None, None, message)
 
-    output = capsys.readouterr().out
     assert inserted_sensor_data == []
-    assert "invalid HMAC signature" in output
+    assert "invalid HMAC signature" in caplog.text

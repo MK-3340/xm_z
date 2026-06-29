@@ -1,17 +1,26 @@
 import paho.mqtt.client as mqtt # type: ignore
+
 from gateway.payload_validator import parse_and_validate_payload
 from database.db_manager import insert_sensor_data,insert_alarm
 from anomaly_detection.threshold_detector import detect_threshold_anomaly
 from gateway.security import is_allowed_device, verify_signature,check_nonce_once,check_timestamp_window
+from gateway.config import load_runtime_config 
+from gateway.logger import get_loogger
 
-BROKER_HOST = "localhost"
-BROKER_PORT = 1883
-TOPIC = "factory/motor_001/telemetry"
+CONFIG = load_runtime_config() 
+
+BROKER_HOST = CONFIG["broker_host"]
+BROKER_PORT = CONFIG["broker_port"]
+TOPIC = CONFIG["telemetry_topic"]
+DB_PATH = CONFIG["db_path"]
+
+logger = get_loogger(__name__)
+
 
 def on_connect(client, userdata, flags, reason_code, properties):
-    print("MQTT subscriber connected.")
+    logger.info("MQTT subscriber connected.reason_code=%s",reason_code)
     client.subscribe(TOPIC)
-    print(f"Subscribed topic: {TOPIC}")
+    logger.info("Subscribed topic: %s",TOPIC)
 
 
 def on_message(client, userdata, msg):
@@ -31,7 +40,7 @@ def on_message(client, userdata, msg):
         if not check_nonce_once(data["device_id"],data["nonce"]):
             raise ValueError("duplicate nonce detected")
 
-        insert_sensor_data(data)
+        insert_sensor_data(data,DB_PATH)
 
         result = detect_threshold_anomaly(data)
         
@@ -43,22 +52,20 @@ def on_message(client, userdata, msg):
                 "alarm_reason":result["alarm_reason"],
                 "severity":result["severity"],
             }
-            insert_alarm(alarm)
-            print(f"[ALARM SAVED]{alarm}")
+            insert_alarm(alarm,DB_PATH)
+            logger.warning("alarm saved:%s",alarm)
 
 
 
-    except ValueError as e:
-        print(f"[INVALID MESSAGE] topic={msg.topic},error={e},payload={payload}")
+    except ValueError as exc:
+        logger.warning("invalid message | topic=%s,error=%s,payload=%s",msg.topic,exc,payload,)
         return
-    print(
-        "[VALID DATA] "
-        f"device_id={data['device_id']},"
-        f"timestamp={data['timestamp']},"
-        f"temperature={data['temperature']},"
-        f"vibration={data['vibration']},"
-        f"current={data['current']},"
-        f"status={data['status']}"
+    logger.info(
+        "valid data | device_id=%s | temperature=%s | vibration=%s | current=%s",
+        data['device_id'],
+        data['timestamp'],
+        data['vibration'],
+        data['current'],
     )
 
 

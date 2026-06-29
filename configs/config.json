@@ -1,0 +1,6 @@
+{
+    "broker_host":"locahost",
+    "broker_port":1883,
+    "telemetry_topic":"factory/motor_001/telemetry",
+    "db_path":"data/iot_data.db"
+}
